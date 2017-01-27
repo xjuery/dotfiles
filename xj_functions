@@ -1,0 +1,100 @@
+#!/bin/bash
+
+dstopall(){
+  docker stop `docker ps -aq`
+}
+
+dcleanup(){
+	local containers
+	containers=( $(docker ps -aq 2>/dev/null) )
+	docker rm "${containers[@]}" 2>/dev/null
+	local volumes
+	volumes=( $(docker ps --filter status=exited -q 2>/dev/null) )
+	docker rm -v "${volumes[@]}" 2>/dev/null
+	local images
+	images=( $(docker images --filter dangling=true -q 2>/dev/null) )
+	docker rmi "${images[@]}" 2>/dev/null
+}
+
+del_stopped(){
+	local name=$1
+	local state
+	state=$(docker inspect --format "{{.State.Running}}" "$name" 2>/dev/null)
+
+	if [[ "$state" == "false" ]]; then
+		docker rm "$name"
+	fi
+}
+
+relies_on(){
+	for container in "$@"; do
+		local state
+		state=$(docker inspect --format "{{.State.Running}}" "$container" 2>/dev/null)
+
+		if [[ "$state" == "false" ]] || [[ "$state" == "" ]]; then
+			echo "$container is not running, starting it for you."
+			$container
+		fi
+	done
+}
+
+htop(){
+	docker run --rm -it \
+		--pid host \
+		--net none \
+		--name htop \
+		jess/htop
+}
+
+mutt(){
+	# subshell so we dont overwrite variables
+	(
+	local account=$1
+	export IMAP_SERVER
+	export SMTP_SERVER
+
+	if [[ "$account" == "riseup" ]]; then
+		export GMAIL=$MAIL_RISEUP
+		export GMAIL_NAME=$MAIL_RISEUP_NAME
+		export GMAIL_PASS=$MAIL_RISEUP_PASS
+		export GMAIL_FROM=$MAIL_RISEUP_FROM
+		IMAP_SERVER=mail.riseup.net
+		SMTP_SERVER=$IMAP_SERVER
+	fi
+
+	docker run -it --rm \
+		-e GMAIL \
+		-e GMAIL_NAME \
+		-e GMAIL_PASS \
+		-e GMAIL_FROM \
+		-e GPG_ID \
+		-e IMAP_SERVER \
+		-e SMTP_SERVER \
+		-v /etc/localtime:/etc/localtime:ro \
+		--name "mutt-${account}" \
+		jess/mutt
+	)
+}
+
+vscode(){
+	del_stopped visualstudio
+
+	docker run -d \
+		-v /etc/localtime:/etc/localtime:ro \
+		-v /tmp/.X11-unix:/tmp/.X11-unix  \
+		-e "DISPLAY=unix${DISPLAY}" \
+		--name visualstudio \
+		jess/vscode
+}
+
+wireshark(){
+	del_stopped wireshark
+
+	docker run -d \
+		-v /etc/localtime:/etc/localtime:ro \
+		-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-e "DISPLAY=unix${DISPLAY}" \
+		--net host \
+		--name wireshark \
+		jess/wireshark
+}
