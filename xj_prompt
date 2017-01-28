@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-THEME_PROMPT_SEPARATOR="#"
+THEME_PROMPT_SEPARATOR=""
 
 SHELL_SSH_CHAR=" "
 SHELL_THEME_PROMPT_COLOR=32
@@ -54,23 +54,6 @@ function powerline_shell_prompt {
     LAST_THEME_COLOR=${SHELL_PROMPT_COLOR}
 }
 
-function powerline_virtualenv_prompt {
-    local environ=""
-
-    if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
-        environ="conda: $CONDA_DEFAULT_ENV"
-    elif [[ -n "$VIRTUAL_ENV" ]]; then
-        environ=$(basename "$VIRTUAL_ENV")
-    fi
-
-    if [[ -n "$environ" ]]; then
-        VIRTUALENV_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${VIRTUALENV_THEME_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${VIRTUALENV_THEME_PROMPT_COLOR}) ${VIRTUALENV_CHAR}$environ ${normal}"
-        LAST_THEME_COLOR=${VIRTUALENV_THEME_PROMPT_COLOR}
-    else
-        VIRTUALENV_PROMPT=""
-    fi
-}
-
 function powerline_scm_prompt {
     #scm_prompt_vars
 
@@ -107,26 +90,15 @@ function powerline_last_status_prompt {
     fi
 }
 
-function powerline_in_vim_prompt {
-  if [ -z "$VIMRUNTIME" ]; then
-    IN_VIM_PROMPT=""
-  else
-    IN_VIM_PROMPT="$(set_rgb_color ${LAST_THEME_COLOR} ${IN_VIM_PROMPT_COLOR})${THEME_PROMPT_SEPARATOR}${normal}$(set_rgb_color - ${IN_VIM_PROMPT_COLOR}) ${IN_VIM_PROMPT_TEXT} ${normal}$(set_rgb_color ${IN_VIM_PROMPT_COLOR} -)${normal}"
-    LAST_THEME_COLOR=${IN_VIM_PROMPT_COLOR}
-  fi
-}
-
 function powerline_prompt_command() {
     local LAST_STATUS="$?"
 
     powerline_shell_prompt
-    powerline_in_vim_prompt
-    powerline_virtualenv_prompt
     powerline_scm_prompt
-    powerline_cwd_prompt
     powerline_last_status_prompt LAST_STATUS
 
-    PS1="${SHELL_PROMPT}${IN_VIM_PROMPT}${VIRTUALENV_PROMPT}${SCM_PROMPT}\e[39m${CWD_PROMPT}${LAST_STATUS_PROMPT}\e[39m\e[49m "
+    DIRECTORY="\[\033[48;5;8m\] \w \[$(tput sgr0)\]"
+    PS1="\n${DIRECTORY}\n\e[39m\[$(tput sgr0)\]\[\033[48;5;28m\] \h \[$(tput sgr0)\]${SHELL_PROMPT}${SCM_PROMPT}\e[39m\e[49m${LAST_STATUS_PROMPT}\e[39m\e[49m "
 }
 
 PROMPT_COMMAND=powerline_prompt_command
