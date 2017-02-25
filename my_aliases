@@ -1,0 +1,4 @@
+alias install="sudo apt update && sudo apt install "
+alias ydl="youtube-dl -x --prefer-ffmpeg --audio-format best --audio-quality 0 "
+alias upgrade="sudo apt update && sudo apt upgrade"
+alias dpsa="docker ps -a"
