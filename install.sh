@@ -1,5 +1,20 @@
+# UTILITY FUNCTIONS
+cleanFile(){
+	local name=$1
+  if [ -f "$name" ]
+  then
+  	rm -f $name
+  fi
+}
+
+ping -q -w 1 -c 1 www.google.fr  > /dev/null 2>&1 && echo -e "Internet connection [\e[32mOK\e[39m]" || exit 1
+
 # DEPENDANCIES
-apt update && apt -y upgrade
+apt update && apt -y upgrade && apt install -y \
+		apt-transport-https \
+		ca-certificates \
+		curl
+
 add-apt-repository ppa:webupd8team/unstable
 add-apt-repository ppa:webupd8team/java
 curl -fsSL https://apt.dockerproject.org/gpg | apt-key add -
@@ -43,13 +58,13 @@ nvm install node
 wget -O atom.deb https://atom.io/download/deb
 dpkg -i atom.deb
 apt -f install
-rm -f atom.deb
+cleanFile atom.deb
 
 # INSTALL GOOGLE CHROME
 apt install -y google-chrome-stable
 
-# INSTALL JAVA 9
-apt install -y oracle-java9-installer
+# INSTALL JAVA 8
+apt install -y oracle-java8-installer
 
 # INSTALL keeweb
 wget -O keeweb.deb https://github.com/keeweb/keeweb/releases/download/v1.4.0/KeeWeb-1.4.0.linux.x64.deb
@@ -63,16 +78,13 @@ mkdir -p $HOME/bin
 tar -C $HOME/bin -xzf WebStorm-2016.3.3.tar.gz
 cleanFile WebStorm-2016.3.3.tar.gz
 
+# INSTALL MY_DOTFILES
+git clone https://github.com/xjuery/dotfiles.git ~/dotfiles
+echo "" >> .bashrc
+echo "source ~/dotfiles/my_bashrc" >> .bashrc
+echo "" >> .bashrc
+
 # FINISH & CLEAN
 apt autoremove
 apt autoclean
 apt clean
-
-# UTILITY FUNCTIONS
-cleanFile(){
-	local name=$1
-  if [ -f "$name" ]
-  then
-  	rm -f $name
-  fi
-}

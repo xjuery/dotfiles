@@ -6,14 +6,14 @@ export NVM_DIR="/home/xavier/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 # Configure rbenv for ruby
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+#export PATH="$HOME/.rbenv/bin:$PATH"
+#eval "$(rbenv init -)"
 
 # Hack LD_LIBRARY_PATH in order to keep sound managing possible
 export LD_LIBRARY_PATH=/usr/lib/vmware/lib/libglibmm-2.4.so.1/:$LD_LIBRARY_PATH
 
 # Configure Yarn for Nodejs
-export PATH="$PATH:`yarn global bin`"
+#export PATH="$PATH:`yarn global bin`"
 
 # Configure Go
 export PATH=$PATH:/usr/local/go/bin
