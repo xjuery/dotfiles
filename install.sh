@@ -84,6 +84,24 @@ echo "" >> .bashrc
 echo "source ~/dotfiles/my_bashrc" >> .bashrc
 echo "" >> .bashrc
 
+# INSTALL GOLANG
+export GO_VERSION=1.8
+export GO_SRC=/usr/local/go
+
+# purge old src
+if [ -d "$GO_SRC" ]; then
+	rm -rf "$GO_SRC"
+fi
+
+# subshell
+(
+curl -sSL "https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz" | tar -v -C /usr/local -xz
+# rebuild stdlib for faster builds
+chown -R "$USER" /usr/local/go/pkg
+export PATH=$PATH:/usr/local/go/bin
+CGO_ENABLED=0 go install -a -installsuffix cgo std
+)
+
 # FINISH & CLEAN
 apt autoremove
 apt autoclean
