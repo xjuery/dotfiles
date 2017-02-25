@@ -20,6 +20,6 @@ export PATH=$PATH:/usr/local/go/bin
 export GOPATH=~/Programmation/GO
 
 # Call my other bash scripts
-source dotfiles/xj_aliases
-source dotfiles/xj_functions
-source dotfiles/xj_prompt
+source ~/dotfiles/my_aliases
+source ~/dotfiles/my_functions
+source ~/dotfiles/my_prompt
