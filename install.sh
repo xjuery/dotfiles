@@ -73,10 +73,8 @@ apt -f install
 cleanFile keeweb.deb
 
 # INSTALL WEBSTORM
-wget https://download.jetbrains.com/webstorm/WebStorm-2016.3.3.tar.gz
 mkdir -p $HOME/bin
-tar -C $HOME/bin -xzf WebStorm-2016.3.3.tar.gz
-cleanFile WebStorm-2016.3.3.tar.gz
+curl -sSL "https://download.jetbrains.com/webstorm/WebStorm-2016.3.3.tar.gz" | tar -v -C $HOME/bin -xz
 
 # INSTALL GOLANG
 export GO_VERSION=1.8
