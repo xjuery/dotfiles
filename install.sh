@@ -78,12 +78,6 @@ mkdir -p $HOME/bin
 tar -C $HOME/bin -xzf WebStorm-2016.3.3.tar.gz
 cleanFile WebStorm-2016.3.3.tar.gz
 
-# INSTALL MY_DOTFILES
-git clone https://github.com/xjuery/dotfiles.git ~/dotfiles
-echo "" >> .bashrc
-echo "source ~/dotfiles/my_bashrc" >> .bashrc
-echo "" >> .bashrc
-
 # INSTALL GOLANG
 export GO_VERSION=1.8
 export GO_SRC=/usr/local/go
@@ -101,6 +95,12 @@ chown -R "$USER" /usr/local/go/pkg
 export PATH=$PATH:/usr/local/go/bin
 CGO_ENABLED=0 go install -a -installsuffix cgo std
 )
+
+# INSTALL MY_DOTFILES
+git clone https://github.com/xjuery/dotfiles.git ~/dotfiles
+echo "" >> ~/.bashrc
+echo "source ~/dotfiles/my_bashrc" >> ~/.bashrc
+echo "" >> ~/.bashrc
 
 # FINISH & CLEAN
 apt autoremove
