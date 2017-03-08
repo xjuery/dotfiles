@@ -120,6 +120,8 @@ sh -c "echo 'deb http://download.opensuse.org/repositories/home:/Horst3180/xUbun
 curl http://download.opensuse.org/repositories/home:Horst3180/xUbuntu_16.04/Release.key | apt-key add -
 apt update && apt install arc-theme
 
+# TODO: auto change wallpaper
+
 # FINISH & CLEAN
 apt autoremove
 apt autoclean
