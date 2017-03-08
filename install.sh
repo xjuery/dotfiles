@@ -1,8 +1,9 @@
-#####################################################################
+################################################################################
 # Post-install Initialisation script
 # (Script compatible with *Ubuntu 16.04.x)
-#####################################################################
+################################################################################
 
+################################################################################
 # UTILITY FUNCTIONS
 cleanFile(){
 	local name=$1
@@ -12,8 +13,11 @@ cleanFile(){
   fi
 }
 
+################################################################################
+# preliminary checks
 ping -q -w 1 -c 1 www.google.fr  > /dev/null 2>&1 && echo -e "Internet connection [\e[32mOK\e[39m]" || exit 1
 
+################################################################################
 # DEPENDANCIES
 apt update && apt -y upgrade && apt install -y \
 		apt-transport-https \
@@ -33,63 +37,56 @@ echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /et
 # Import the Google Chrome public key
 curl https://dl.google.com/linux/linux_signing_key.pub | apt-key add -
 
+################################################################################
+# Post Dependancies installation update
 apt update
 
-# INSTALL GUAKE
-apt install -y guake
-
-# INSTALL GIT
-apt install -y git
-
-# INSTALL DOCKER
-apt install -y --no-install-recommends \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    software-properties-common
-
+################################################################################
+# APT INSTALLs
+# docker
+apt install -y --no-install-recommends software-properties-common
 apt install -y docker-engine
+# guake
+apt install -y guake
+# git
+apt install -y git
+# Google Chrome
+apt install -y google-chrome-stable
+# java 8
+apt install -y oracle-java8-installer
+# vlc
+apt install -y vlc
+# calibre
+apt install -y calibre
 
-# INSTALL NVM
+################################################################################
+# DPKG INSTALLs
+# atom
+wget -O atom.deb https://atom.io/download/deb
+dpkg -i atom.deb
+apt -f install
+cleanFile atom.deb
+# keeweb
+wget -O keeweb.deb https://github.com/keeweb/keeweb/releases/download/v1.4.0/KeeWeb-1.4.0.linux.x64.deb
+dpkg -i keeweb.deb
+apt -f install
+cleanFile keeweb.deb
+
+################################################################################
+# SPECIFIC INSTALLs
+# NVM && NODEJS
 export NVM_DIR="$HOME/.nvm" && (
   git clone https://github.com/creationix/nvm.git "$NVM_DIR"
   cd "$NVM_DIR"
   git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" origin`
 ) && . "$NVM_DIR/nvm.sh"
 chown -R "$USER" "$NVM_DIR"
-
 nvm install node
-
-# INSTALL atom
-wget -O atom.deb https://atom.io/download/deb
-dpkg -i atom.deb
-apt -f install
-cleanFile atom.deb
-
-# INSTALL GOOGLE CHROME
-apt install -y google-chrome-stable
-
-# INSTALL JAVA 8
-apt install -y oracle-java8-installer
-
-# INSTALL VLC
-apt install VLC
-
-# INSTALL Calibre
-apt install calibre
-
-# INSTALL keeweb
-wget -O keeweb.deb https://github.com/keeweb/keeweb/releases/download/v1.4.0/KeeWeb-1.4.0.linux.x64.deb
-dpkg -i keeweb.deb
-apt -f install
-cleanFile keeweb.deb
-
-# INSTALL WEBSTORM
+# WEBSTORM
 mkdir -p $HOME/bin
 curl -sSL "https://download.jetbrains.com/webstorm/WebStorm-2016.3.3.tar.gz" | tar -v -C $HOME/bin -xz
 chown -R "$USER" $HOME/bin
-
-# INSTALL GOLANG
+# GOLANG
 export GO_VERSION=1.8
 export GO_SRC=/usr/local/go
 
@@ -107,6 +104,7 @@ export PATH=$PATH:/usr/local/go/bin
 CGO_ENABLED=0 go install -a -installsuffix cgo std
 )
 
+################################################################################
 # INSTALL MY_DOTFILES
 git clone https://github.com/xjuery/dotfiles.git ~/dotfiles
 echo "" >> ~/.bashrc
@@ -115,13 +113,16 @@ echo "" >> ~/.bashrc
 ln -s ~/dotfiles/face.jpg ~/.face
 chown "$USER" ~/.face
 
+# TODO: auto change wallpaper
+
+################################################################################
 # INSTALL THEME ONLY FOR UBUNTU 16.04
 sh -c "echo 'deb http://download.opensuse.org/repositories/home:/Horst3180/xUbuntu_16.04/ /' > /etc/apt/sources.list.d/arc-theme.list"
 curl http://download.opensuse.org/repositories/home:Horst3180/xUbuntu_16.04/Release.key | apt-key add -
 apt update && apt install arc-theme
 
-# TODO: auto change wallpaper
 
+################################################################################
 # FINISH & CLEAN
 apt autoremove
 apt autoclean
