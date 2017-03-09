@@ -116,15 +116,14 @@ echo "source ~/dotfiles/my_bashrc" >> ~/.bashrc
 echo "" >> ~/.bashrc
 ln -s ~/dotfiles/face.jpg ~/.face
 chown "$USER" ~/.face
-
-# TODO: auto change wallpaper
+chown -R "$USER" ~/dotfiles
+xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/workspace0/last-image --set /home/xavier/dotfiles/wallpaper.jpg
 
 ################################################################################
 # INSTALL THEME ONLY FOR UBUNTU 16.04
 sh -c "echo 'deb http://download.opensuse.org/repositories/home:/Horst3180/xUbuntu_16.04/ /' > /etc/apt/sources.list.d/arc-theme.list"
 curl http://download.opensuse.org/repositories/home:Horst3180/xUbuntu_16.04/Release.key | apt-key add -
 apt update && apt install arc-theme
-
 
 ################################################################################
 # FINISH & CLEAN
