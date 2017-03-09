@@ -46,6 +46,10 @@ apt update
 # docker
 apt install -y --no-install-recommends software-properties-common
 apt install -y docker-engine
+groupadd docker
+gpasswd -a ${USER} docker
+service docker restart
+
 # guake
 apt install -y guake
 # git
