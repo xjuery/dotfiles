@@ -1,4 +1,5 @@
 alias install="sudo apt update && sudo apt install "
 alias ydl="youtube-dl -x --prefer-ffmpeg --audio-format best --audio-quality 0 "
-alias upgrade="sudo apt update && sudo apt upgrade"
+alias upgrade="sudo apt update && sudo apt upgrade && sudo apt autoremove && sudo apt autoclean && sudo apt clean"
 alias dpsa="docker ps -a"
+alias speedtest="speedtest-cli --bytes | grep byte"

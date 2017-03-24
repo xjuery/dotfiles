@@ -68,3 +68,58 @@ wireshark(){
 		--name wireshark \
 		jess/wireshark
 }
+
+tgzinstall(){
+	curl -sSL $1 | tar -v -C $2 -xz
+}
+
+chrome(){
+  STATE=$(docker ps --all --filter="name=xj-chrome" --format="exists")
+  if [ "$STATE" == "" ]
+  then
+  docker run -d \
+    --name=xj-chrome \
+    --cap-add=SYS_ADMIN \
+    --security-opt seccomp:unconfined \
+    --net=host \
+    --env="DISPLAY" \
+    --env="HOST_UID=$(id -u)" \
+    --env="HOST_GID=$(id -g)" \
+    --device /dev/snd \
+    --log-driver=journald \
+    --volume="/etc/localtime:/etc/localtime:ro" \
+    --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+    --volume="/dev/shm:/dev/shm:rw" \
+    --volume="$HOME/downloads:/home/docker/Downloads:rw" \
+    --volume="/usr/share/icons:/usr/share/icons:ro" \
+    --volume="/usr/share/fonts:/usr/share/fonts:ro" \
+    --volume="/etc/fonts:/etc/fonts:ro" \
+    --volume="/var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket:ro" \
+    --volume="$HOME/.Xauthority:/home/docker/.Xauthority:ro" \
+    --volume="$HOME/.cache/google-chrome-cache:/home/docker/.cache/google-chrome:rw" \
+    --volume="$HOME/.cache/google-chrome-config:/home/docker/.config/google-chrome:rw" \
+    xj-chrome
+  else
+    docker start xj-chrome
+  fi
+}
+
+gmail(){  
+  STATE=$(docker ps --all --filter="name=xj-mutt" --format="exists")
+  if [ "$STATE" != "" ]
+  then
+      dcleanup
+  fi
+
+  export GMAIL='xavier.juery'
+  export GMAIL_NAME='Xavier JUERY'
+  export GMAIL_FROM='xavier.juery@gmail.com'
+
+  docker run -it \
+          -v /etc/localtime:/etc/localtime:ro \
+          -e GMAIL -e GMAIL_NAME \
+          -e GMAIL_PASS -e GMAIL_FROM \
+          --name xj-mutt \
+          xj-mutt
+
+}

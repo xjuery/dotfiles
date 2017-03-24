@@ -1,5 +1,5 @@
 # Add my bin dir to PATH
-export PATH=$PATH:/home/xavier/bin/
+export PATH=$PATH:/usr/local/bin:/home/xavier/bin
 
 # Configure NVM for nodejs
 export NVM_DIR="/home/xavier/.nvm"

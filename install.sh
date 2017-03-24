@@ -88,7 +88,7 @@ chown -R "$USER" "$NVM_DIR"
 nvm install node
 # WEBSTORM
 mkdir -p $HOME/bin
-curl -sSL "https://download.jetbrains.com/webstorm/WebStorm-2016.3.3.tar.gz" | tar -v -C $HOME/bin -xz
+curl -sSL "https://download.jetbrains.com/webstorm/WebStorm-2017.1.tar.gz" | tar -v -C $HOME/bin -xz
 chown -R "$USER" $HOME/bin
 # GOLANG
 export GO_VERSION=1.8
