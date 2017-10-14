@@ -47,7 +47,7 @@ apt update
 apt install -y --no-install-recommends software-properties-common
 apt install -y docker-engine
 groupadd docker
-gpasswd -a ${USER} docker
+gpasswd -a xavier docker
 service docker restart
 
 # guake
@@ -57,7 +57,7 @@ apt install -y git
 # Google Chrome
 apt install -y google-chrome-stable
 # java 8
-apt install -y oracle-java8-installer
+apt install -y oracle-java9-installer
 # vlc
 apt install -y vlc
 # calibre
@@ -71,7 +71,7 @@ dpkg -i atom.deb
 apt -f install
 cleanFile atom.deb
 # keeweb
-wget -O keeweb.deb https://github.com/keeweb/keeweb/releases/download/v1.4.0/KeeWeb-1.4.0.linux.x64.deb
+wget -O keeweb.deb https://github.com/keeweb/keeweb/releases/download/v1.5.6/KeeWeb-1.5.6.linux.x64.deb
 dpkg -i keeweb.deb
 apt -f install
 cleanFile keeweb.deb
@@ -79,19 +79,18 @@ cleanFile keeweb.deb
 ################################################################################
 # SPECIFIC INSTALLs
 # NVM && NODEJS
-export NVM_DIR="$HOME/.nvm" && (
-  git clone https://github.com/creationix/nvm.git "$NVM_DIR"
-  cd "$NVM_DIR"
-  git checkout `git describe --abbrev=0 --tags --match "v[0-9]*" origin`
-) && . "$NVM_DIR/nvm.sh"
-chown -R "$USER" "$NVM_DIR"
+wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.5/install.sh | bash
+chown -R xavier "$HOME/.nvm"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 nvm install node
 # WEBSTORM
 mkdir -p $HOME/bin
-curl -sSL "https://download.jetbrains.com/webstorm/WebStorm-2017.1.tar.gz" | tar -v -C $HOME/bin -xz
-chown -R "$USER" $HOME/bin
+curl -sSL "https://download.jetbrains.com/webstorm/WebStorm-2017.2.4.tar.gz" | tar -v -C $HOME/bin -xz
+chown -R xavier $HOME/bin
 # GOLANG
-export GO_VERSION=1.8
+export GO_VERSION=1.9.1
 export GO_SRC=/usr/local/go
 
 # purge old src
@@ -102,8 +101,8 @@ fi
 # subshell
 (
 curl -sSL "https://storage.googleapis.com/golang/go${GO_VERSION}.linux-amd64.tar.gz" | tar -v -C /usr/local -xz
-# rebuild stdlib for faster builds
-chown -R "$USER" /usr/local/go/pkg
+ rebuild stdlib for faster builds
+chown -R xavier /usr/local/go/pkg
 export PATH=$PATH:/usr/local/go/bin
 CGO_ENABLED=0 go install -a -installsuffix cgo std
 )
@@ -115,15 +114,13 @@ echo "" >> ~/.bashrc
 echo "source ~/dotfiles/my_bashrc" >> ~/.bashrc
 echo "" >> ~/.bashrc
 ln -s ~/dotfiles/face.jpg ~/.face
-chown "$USER" ~/.face
-chown -R "$USER" ~/dotfiles
+chown xavier ~/.face
+chown -R xavier ~/dotfiles
 xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/workspace0/last-image --set /home/xavier/dotfiles/wallpaper.jpg
 
 ################################################################################
-# INSTALL THEME ONLY FOR UBUNTU 16.04
-sh -c "echo 'deb http://download.opensuse.org/repositories/home:/Horst3180/xUbuntu_16.04/ /' > /etc/apt/sources.list.d/arc-theme.list"
-curl http://download.opensuse.org/repositories/home:Horst3180/xUbuntu_16.04/Release.key | apt-key add -
-apt update && apt install arc-theme
+# INSTALL THEME
+apt install arc-theme
 
 ################################################################################
 # FINISH & CLEAN
