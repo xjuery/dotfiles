@@ -49,7 +49,7 @@ gpasswd -a xavier docker
 service docker restart
 
 # guake
-apt install -y guake git google-chrome-stable openjdk-9-jdk vlc calibre keepassxc
+apt install -y guake git google-chrome-stable openjdk-9-jdk vlc calibre
 
 ################################################################################
 # DPKG INSTALLs
