@@ -56,7 +56,7 @@ apt install -y guake git google-chrome-stable openjdk-9-jdk vlc calibre
 # atom
 wget -O atom.deb https://atom.io/download/deb
 dpkg -i atom.deb
-apt -f install
+#apt -f install
 cleanFile atom.deb
 
 ################################################################################
@@ -107,6 +107,7 @@ apt install arc-theme
 
 ################################################################################
 # FINISH & CLEAN
+chown -R xavier:$(id -gn xavier) /home/xavier
 apt autoremove
 apt autoclean
 apt clean
