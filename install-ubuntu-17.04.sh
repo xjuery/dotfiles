@@ -24,12 +24,6 @@ apt update && apt -y upgrade && apt install -y \
 		ca-certificates \
 		curl
 
-curl -fsSL https://apt.dockerproject.org/gpg | apt-key add -
-add-apt-repository -y \
-       "deb https://apt.dockerproject.org/repo/ \
-       ubuntu-$(lsb_release -cs) \
-       main"
-add-apt-repository -y ppa:phoerious/keepassxc
 echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
 
 # Import the Google Chrome public key
@@ -43,12 +37,8 @@ apt update
 # APT INSTALLs
 # docker
 apt install -y --no-install-recommends software-properties-common
-apt install -y docker-engine
-groupadd docker
-gpasswd -a xavier docker
-service docker restart
 
-# guake
+# guake and others
 apt install -y guake git google-chrome-stable openjdk-9-jdk vlc calibre
 
 ################################################################################
@@ -61,17 +51,19 @@ cleanFile atom.deb
 
 ################################################################################
 # SPECIFIC INSTALLs
+mkdir -p $HOME/bin
+
+# gdrive
+wget -O $HOME/bin/gdrive https://docs.google.com/uc?id=0B3X9GlR6EmbnQ0FtZmJJUXEyRTA&export=download
+chmod +x $HOME/bin/gdrive
+
 # NVM && NODEJS
 wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.33.6/install.sh | bash
-chown -R xavier "$HOME/.nvm"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 nvm install node
-# WEBSTORM
-mkdir -p $HOME/bin
-curl -sSL "https://download.jetbrains.com/webstorm/WebStorm-2017.2.5.tar.gz" | tar -v -C $HOME/bin -xz
-chown -R xavier $HOME/bin
+
 # GOLANG
 export GO_VERSION=1.9.2
 export GO_SRC=/usr/local/go
