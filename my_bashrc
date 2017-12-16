@@ -18,7 +18,7 @@ export LD_LIBRARY_PATH=/usr/lib/vmware/lib/libglibmm-2.4.so.1/:$LD_LIBRARY_PATH
 
 # Configure Go
 export PATH=$PATH:/usr/local/go/bin
-export GOPATH=~/Programmation/GO
+export GOPATH=~/Programmation/go
 
 # Call my other bash scripts
 source ~/dotfiles/my_aliases

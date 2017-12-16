@@ -35,11 +35,11 @@ apt update
 
 ################################################################################
 # APT INSTALLs
-# docker
+# prerequisites
 apt install -y --no-install-recommends software-properties-common
 
 # guake and others
-apt install -y guake git google-chrome-stable openjdk-9-jdk vlc calibre
+apt install -y guake git google-chrome-stable openjdk-9-jdk vlc calibre gparted
 
 ################################################################################
 # DPKG INSTALLs
