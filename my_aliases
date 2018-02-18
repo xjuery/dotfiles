@@ -4,3 +4,4 @@ alias upgrade="sudo apt update && sudo apt upgrade && sudo apt autoremove && sud
 alias dpsa="docker ps -a"
 alias speedtest="speedtest-cli --bytes | grep byte"
 alias update="sudo apt update"
+alias upgradable="sudo apt list --upgradable"
