@@ -1,64 +1,29 @@
 #!/usr/bin/env bash
-NORMAL_PROMPT="\e[39m\e[49m"
 
-function set_rgb_color {
-    if [[ "${1}" != "-" ]]; then
-        fg="38;5;${1}"
-    fi
-    if [[ "${2}" != "-" ]]; then
-        bg="48;5;${2}"
-        [[ -n "${fg}" ]] && bg=";${bg}"
-    fi
-    echo -e "\[\033[${fg}${bg}m\]"
-}
-
-STATUS_FOREGROUND=256
-STATUS_BACKGROUND=1
-function getLastStatus {
-    if [[ "$1" -eq 0 ]]; then
-        LAST_STATUS_PROMPT=""
-    else
-        LAST_STATUS_PROMPT="$(set_rgb_color $STATUS_FOREGROUND $STATUS_BACKGROUND) $1 $NORMAL_PROMPT"
-    fi
-}
-
-NORMAL_USERNAME_FOREGROUND=256
-NORMAL_USERNAME_BACKGROUND=32
-SUDO_USERNAME_FOREGROUND=256
-SUDO_USERNAME_BACKGROUND=202
-function defineUsernameColor() {
-  USERNAME_PROMPT="$(set_rgb_color $NORMAL_USERNAME_FOREGROUND $NORMAL_USERNAME_BACKGROUND) \u $NORMAL_PROMPT"
-  if sudo -n uptime 2>&1 | grep -q "load"; then
-      USERNAME_PROMPT="$(set_rgb_color $SUDO_USERNAME_FOREGROUND $SUDO_USERNAME_BACKGROUND) \u $NORMAL_PROMPT"
-  fi
-}
-
-GIT_FOREGROUND=256
-GIT_BACKGROUND=136
-function gitBranch() {
-  GIT_BRANCH="$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
-  if [[ -z $GIT_BRANCH ]]; then
-    GIT_PROMPT=""
-  else
-    GIT_PROMPT="$(set_rgb_color $GIT_FOREGROUND $GIT_BACKGROUND) $GIT_BRANCH $NORMAL_PROMPT"
-  fi
-}
-
-DIRECTORY_FOREGROUND=256
-DIRECTORY_BACKGROUND=243
-HOSTNAME_FOREGROUND=256
-HOSTNAME_BACKGROUND=28
+DIRECTORY_COLOR='\e[100m'
+HOSTNAME_COLOR='\e[42m'
+END_COLOR='\e[0m'
+USERNAME_NORMAL_COLOR='\e[104m'
+USERNAME_SUDO_COLOR='\e[43m'
+GIT_COLOR='\e[45m'
 function myCustomPromptCommand() {
 
-    defineUsernameColor
+    # Define Username Color
+    USERNAME_PROMPT="\[$USERNAME_NORMAL_COLOR\] \u \[$END_COLOR\]"
+    if sudo -n uptime 2>&1 | grep -q "load"; then
+        USERNAME_PROMPT="\[$USERNAME_SUDO_COLOR\] \u \[$END_COLOR\]"
+    fi
 
-    local status=$?
-    getLastStatus $status
+    # Define Git Color
+    GIT_BRANCH="$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
+    if [[ -z $GIT_BRANCH ]]; then
+      GIT_PROMPT=""
+    else
+      GIT_PROMPT="\[$GIT_COLOR\] git: $GIT_BRANCH \[$END_COLOR\]"
+    fi
 
-    gitBranch
-
-    DIRECTORY="$(set_rgb_color $DIRECTORY_FOREGROUND $DIRECTORY_BACKGROUND) \w $NORMAL_PROMPT"
-    HOSTNAME="$(set_rgb_color $HOSTNAME_FOREGROUND $HOSTNAME_BACKGROUND) \h $NORMAL_PROMPT"
+    DIRECTORY="\[$DIRECTORY_COLOR\] \w \[$END_COLOR\]"
+    HOSTNAME="\[$HOSTNAME_COLOR\] \h \[$END_COLOR\]"
 
     PS1="\n${DIRECTORY}\n${HOSTNAME}${USERNAME_PROMPT}${GIT_PROMPT}$NORMAL_PROMPT ▶ "
 }

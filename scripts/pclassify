@@ -51,7 +51,7 @@ do
 	fi
 	if [ -z "$DATE" ] || [ "$DATE" == "null" ] # If exif extraction failed
 	then
-		DATE=$(stat -f "%Sm" -t %F "${INPUT}" | awk '{print $1}'| sed 's/-/:/g')
+		DATE=$(stat -c %y "${INPUT}" | awk '{print $1}'| sed 's/-/:/g')
 	fi
 	if [ ! -z "$DATE" ]; # Doublecheck
 	then
