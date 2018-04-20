@@ -6,6 +6,7 @@ END_COLOR='\e[0m'
 USERNAME_NORMAL_COLOR='\e[104m'
 USERNAME_SUDO_COLOR='\e[43m'
 GIT_COLOR='\e[45m'
+UPGRADABLE_COLOR='\e[41m'
 function myCustomPromptCommand() {
 
     # Define Username Color
@@ -25,7 +26,19 @@ function myCustomPromptCommand() {
     DIRECTORY="\[$DIRECTORY_COLOR\] \w \[$END_COLOR\]"
     HOSTNAME="\[$HOSTNAME_COLOR\] \h \[$END_COLOR\]"
 
-    PS1="\n${DIRECTORY}\n${HOSTNAME}${USERNAME_PROMPT}${GIT_PROMPT}$NORMAL_PROMPT ▶ "
+    # Define number of upgradable package
+    UPGRADABLE=""
+    if [ -f ~/.apt_upgrade_count ]; then
+      UPGRADABLE_COUNT=$(cat ~/.apt_upgrade_count)
+      #UPGRADABLE_COUNT=`expr $COUNT - 1`
+      if [ "$UPGRADABLE_COUNT" -gt "0" ]; then
+        UPGRADABLE="\[$UPGRADABLE_COLOR\] $UPGRADABLE_COUNT \[$END_COLOR\]"
+      fi
+    fi
+
+
+
+    PS1="\n${DIRECTORY}\n${HOSTNAME}${USERNAME_PROMPT}${GIT_PROMPT}${UPGRADABLE}$NORMAL_PROMPT ▶ "
 }
 
 PROMPT_COMMAND=myCustomPromptCommand

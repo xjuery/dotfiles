@@ -121,6 +121,10 @@ chown xavier ~/.face
 chown -R xavier ~/dotfiles
 xfconf-query --channel xfce4-desktop --property /backdrop/screen0/monitor0/workspace0/last-image --set /home/xavier/dotfiles/wallpaper.jpg
 
+# Install the cron line for the upgrade count background script (used by the PS1 prompt)
+line="*/1 * * * * ~/dotfiles/upgrade_count_cron.sh"
+(crontab -u xavier -l; echo "$line" ) | crontab -u xavier -
+
 ################################################################################
 # INSTALL THEME
 apt install arc-theme
