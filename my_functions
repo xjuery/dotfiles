@@ -123,3 +123,8 @@ gmail(){
           xj-mutt
 
 }
+
+archive(){
+	tar cvf $1.tar $1
+	gzip $1.tar
+}
