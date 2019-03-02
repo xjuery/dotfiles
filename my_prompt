@@ -1,44 +1,8 @@
-#!/usr/bin/env bash
 
-DIRECTORY_COLOR='\e[100m'
-HOSTNAME_COLOR='\e[42m'
-END_COLOR='\e[0m'
-USERNAME_NORMAL_COLOR='\e[104m'
-USERNAME_SUDO_COLOR='\e[43m'
-GIT_COLOR='\e[45m'
-UPGRADABLE_COLOR='\e[41m'
-function myCustomPromptCommand() {
-
-    # Define Username Color
-    USERNAME_PROMPT="\[$USERNAME_NORMAL_COLOR\] \u \[$END_COLOR\]"
-    if sudo -n uptime 2>&1 | grep -q "load"; then
-        USERNAME_PROMPT="\[$USERNAME_SUDO_COLOR\] \u \[$END_COLOR\]"
-    fi
-
-    # Define Git Color
-    GIT_BRANCH="$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')"
-    if [[ -z $GIT_BRANCH ]]; then
-      GIT_PROMPT=""
-    else
-      GIT_PROMPT="\[$GIT_COLOR\] git: $GIT_BRANCH \[$END_COLOR\]"
-    fi
-
-    DIRECTORY="\[$DIRECTORY_COLOR\] \w \[$END_COLOR\]"
-    HOSTNAME="\[$HOSTNAME_COLOR\] \h \[$END_COLOR\]"
-
-    # Define number of upgradable package
-    UPGRADABLE=""
-    if [ -f ~/.apt_upgrade_count ]; then
-      UPGRADABLE_COUNT=$(cat ~/.apt_upgrade_count)
-      #UPGRADABLE_COUNT=`expr $COUNT - 1`
-      if [ "$UPGRADABLE_COUNT" -gt "0" ]; then
-        UPGRADABLE="\[$UPGRADABLE_COLOR\] $UPGRADABLE_COUNT \[$END_COLOR\]"
-      fi
-    fi
-
-
-
-    PS1="\n${DIRECTORY}\n${HOSTNAME}${USERNAME_PROMPT}${GIT_PROMPT}${UPGRADABLE}$NORMAL_PROMPT ▶ "
+function _update_ps1() {
+    PS1=$(powerline-shell $?)
 }
 
-PROMPT_COMMAND=myCustomPromptCommand
+if [[ $TERM != linux && ! $PROMPT_COMMAND =~ _update_ps1 ]]; then
+    PROMPT_COMMAND="_update_ps1; $PROMPT_COMMAND"
+fi
