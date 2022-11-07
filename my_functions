@@ -1,5 +1,33 @@
 #!/bin/bash
 
+sendkey(){
+	local windowid=$1
+	local text=$2
+
+	local previous=$(xdotool getactivewindow)
+	xdotool windowactivate --sync $windowid type $text
+	xdotool windowactivate --sync $windowid key Return
+	xdotool windowactivate $previous
+}
+
+findwindow(){
+	local windowName=$1
+	xdotool search --class $windowName
+}
+
+burniso() {
+	local isofile=$1
+
+	if [ -z "$2" ]
+	then
+		local sp=1
+	else
+		local sp=$2
+	fi
+
+	sudo wodim dev=/dev/sr0 -v speed=$sp -eject "$isofile"
+}
+
 dstopall(){
   docker stop `docker ps -aq`
 }

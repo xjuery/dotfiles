@@ -2,23 +2,24 @@
 export PATH=$PATH:~/.local/bin:/usr/local/bin:~/bin:~/dotfiles/scripts
 
 # Configure NVM for nodejs
-#export NVM_DIR="$HOME/.nvm"
-#[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
-#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
 
 # Configure rbenv for ruby
 #export PATH="$HOME/.rbenv/bin:$PATH"
 #eval "$(rbenv init -)"
 
 # Hack LD_LIBRARY_PATH in order to keep sound managing possible
-export LD_LIBRARY_PATH=/usr/lib/vmware/lib/libglibmm-2.4.so.1/:$LD_LIBRARY_PATH
+#export LD_LIBRARY_PATH=/usr/lib/vmware/lib/libglibmm-2.4.so.1/:$LD_LIBRARY_PATH
 
 # Configure Yarn for Nodejs
 #export PATH="$PATH:`yarn global bin`"
 
 # Configure Go
-export PATH=$PATH:/usr/local/go/bin
-export GOPATH=~/Programmation/go
+#export PATH=$PATH:/usr/local/go/bin
+#export GOPATH=~/Programmation/go
 
 #export PATH="$HOME/.yarn/bin:$PATH"
 #export PATH="$PATH:`yarn global bin`"
@@ -26,10 +27,10 @@ export GOPATH=~/Programmation/go
 #export PATH="$HOME/.rbenv/bin:$PATH"
 #eval "$(rbenv init -)"
 
-export JAVA_HOME="/home/xavier/bin/jdk1.8.0_171"
-export PATH=$PATH:$JAVA_HOME/bin
+#export JAVA_HOME="/home/xavier/bin/jdk1.8.0_171"
+#export PATH=$PATH:$JAVA_HOME/bin
 
 # Call my other bash scripts
 source ~/dotfiles/my_aliases
 source ~/dotfiles/my_functions
-source ~/dotfiles/my_prompt
+#source ~/dotfiles/my_prompt
